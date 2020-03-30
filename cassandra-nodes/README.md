@@ -45,7 +45,7 @@ records to be written to all the nodes (based on the RF, 3 nodes for us)
 
 Consistency is specified separately for both reads and writes. 
 
-We specify a **QUORUM** for most of our apps.  So for a **RF of **3, that means a **2 nodes** must acknowledge **reads** and **writes**.  I’m going to stick with calling it **CL = 2** for the rest of this example.
+We specify a **QUORUM** for most of our apps.  So for a **RF of 3**, that means a **2 nodes** must acknowledge **reads** and **writes**.  I’m going to stick with calling it **CL = 2** for the rest of this example.
 
 **Read Consistency Level (RCL)**
 ```
@@ -72,11 +72,11 @@ Again, the insert is sent to 3 nodes, but the app can move on once two nodes ack
  
 
 ## Node Down!
-With our settings (**RF=3, RCL=2, WCL=2**) we can run with 1 node down, any more and some* transactions will begin to fail.
+With our settings (**RF=3, RCL=2, WCL=2**) we can run with 1 node down, any more and **some** transactions will begin to fail.
 
  
 
-####  One node down 
+####  One node down! 
 
 | node | record    |
 |:-----|:----------|
@@ -95,7 +95,7 @@ INSERTS with CL=2, can still complete.  All we need is 2 acknowledgements, the 
 
 READS – we can still read the OZONE record from 2 nodes, and that’s all we are asking for.
 
-####  Two nodes down 
+####  Two nodes down! 
 
 
 | node  | record   |
@@ -114,9 +114,9 @@ READS – we can still read the OZONE record from 2 nodes, and that’s all we a
 
 
 
-INSERTS with CL=2, cannot reach enough nodes, the insert fails (not written to any nodes).
+INSERTS with CL=2, **cannot** reach enough nodes, the insert fails (not written to any nodes).
 
-READS – We cannot achieve the requested CL, so the read fails.  Again, the app specified this as a requirement. 
+READS – We **cannot** achieve the requested CL, so the read fails.  Remember, the app specified this as a requirement. 
 
 
 
@@ -144,11 +144,11 @@ SELECT * FROM USERS WHERE LOGINNAME=’CRUACHAN’;
 ```
 
 **‘CRUACHAN’** maps to nodes that are up, so reads and writes to those nodes
-will continue without any exceptions
+will continue without any exceptions.
 
 
 ####  The problem with BATCHES
-Applications that batch up data, either in the query, insert or within the application logic, can amplify the impact of failure.  If the above query of CRUACHAN and OZONE were combined to request both records, the whole batch would fail, because OZONE was unavailable, even though CRUACHAN was available. 
+Applications that batch up data, either in the query, insert or within the application logic, can amplify the impact of failure.  If the above queries for CRUACHAN and OZONE were combined to request both records, the whole batch would fail, because OZONE was unavailable, even though CRUACHAN was available. 
 
 
 #### Retry Policies
